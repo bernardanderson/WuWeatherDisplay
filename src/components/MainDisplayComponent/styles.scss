@@ -1,0 +1,76 @@
+.access-weather--overview-display {
+
+    hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 10px 0 10px 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .current-time--header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        line-height: 0.9em;
+        font-size: 50px;
+        font-weight: 600;
+
+        .current-time--last-updated {
+            font-size: 22px;
+            font-style: italic;
+        }
+    }
+
+    .main-data--panel {
+        display: flex;
+        flex-direction: row;
+
+        .panel-heading {
+            font-size: 35px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .full-width {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 250px;
+
+            .sub-item {
+                font-weight: 600;
+                font-size: 90px;
+                padding-top: 35px;
+                margin-bottom: 30px;
+                line-height: 2rem;
+            }
+        }
+
+        .edge-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .radar-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        margin-top: 40px;
+    }
+
+    .medium-font {
+        font-size: 54pt;
+    }
+
+    .smaller-font {
+        font-size: 34pt;
+    }
+}

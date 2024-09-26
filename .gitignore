@@ -1,0 +1,7 @@
+/node_modules/
+/public/build/
+**/bin/
+**/obj/
+.idea
+.DS_Store
+wwwroot/build/*

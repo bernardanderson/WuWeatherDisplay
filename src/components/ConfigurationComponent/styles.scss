@@ -1,0 +1,22 @@
+.configuration--main-display {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 150px;
+
+    .input-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-direction: row;
+        font-size: 18px;
+
+        .apikey-width {
+            width: 350px;
+        }
+
+        .clear-button {
+            margin-left: 350px;
+        }
+    }
+}

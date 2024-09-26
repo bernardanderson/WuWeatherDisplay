@@ -1,0 +1,18 @@
+:root {
+  font-family: Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: white;
+  color: black;
+}
+
+.app-font-and-background--dark {
+  background-color: black;
+  color: gray;
+}
+
+
