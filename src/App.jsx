@@ -14,6 +14,8 @@ function App() {
     useEffect(() => {
         const currentPath = window.location.pathname;
 
+        console.log(!configState.hasConfig());
+
         if (currentPath === "/config" || !configState.hasConfig()) {
             navigate("/config");
         } else {

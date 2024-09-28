@@ -3,17 +3,22 @@ import {getConfigOrDefault, isConfigured, deleteConfig, saveLocalState} from "..
 import { getCurrentWeather, getFiveDayForecast } from "../services/WUApiService.js";
 import dayjs from "dayjs";
 
-export const useWeatherDataStore = create((set) => ({
+export const useWeatherDataStore = create((set, get) => ({
     currentWeather: undefined,
     currentFiveDayForecast: undefined,
     fetchCurrentWeather: async () => {
         const data = await getCurrentWeather();
+        if (data === undefined && get().currentWeather !== undefined) {
+            const pastCurrentWeather = get().currentWeather
+            set({ currentWeather: {...pastCurrentWeather, time: pastCurrentWeather.time + " (Past Due)"}});
+            return;
+        };
         set({ currentWeather: data });
     },
     fetchFiveDayForecast: async () => {
         const data = await getFiveDayForecast();
         set({ currentFiveDayForecast: data });
-    },
+    }
 }));
 
 const getCurrentTime = () => dayjs().format('MMMM D YYYY, h:mm:ss a');

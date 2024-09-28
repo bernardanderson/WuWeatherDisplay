@@ -2,30 +2,39 @@ import {toggleDayNightMode} from "./dayNightTimer.js";
 import {
     useTimeDataStore,
     useWeatherDataStore,
-    useConfigStore,
     useRadarStore
 } from "./store.js";
 
 function initializeIntervals() {
-    const {wuConfig, setWuConfig} = useConfigStore.getState();
-    const {fetchCurrentWeather, fetchFiveDayForecast} = useWeatherDataStore.getState();
-    const setCurrentDisplayTime = useTimeDataStore.getState().setCurrentTime;
-    const setRadarUrl = useRadarStore.getState().setRadarUrl;
-
     const oneSecondIntervalFunctions = () => {
+        const setCurrentDisplayTime = useTimeDataStore.getState().setCurrentTime;
         setCurrentDisplayTime();
-        toggleDayNightMode(wuConfig, setWuConfig);
+        toggleDayNightMode();
+    }
+
+    const setUpdatedRadarUrl = () => {
+        const setRadarUrl = useRadarStore.getState().setRadarUrl;
+        setRadarUrl();
+    }
+
+    const fetchCurrentFiveDayForecast = () => {
+        const {fetchFiveDayForecast} = useWeatherDataStore.getState();
+        fetchFiveDayForecast();
+    }
+
+    const fetchCurrentWeatherForecast = () => {
+        const {fetchCurrentWeather} = useWeatherDataStore.getState();
+        fetchCurrentWeather();
     }
 
     const getOneSecondIntervals = setInterval(oneSecondIntervalFunctions, 1000);
-    const getCurrentWeatherInterval = setInterval(fetchCurrentWeather, wuConfig.weatherUpdateInterval);
-    const getFiveDayForecastInterval = setInterval(fetchFiveDayForecast, 21600000);
-    const getRadarMapInterval = setInterval(setRadarUrl, wuConfig.mapUpdateInterval);
+    const getCurrentWeatherInterval = setInterval(fetchCurrentWeatherForecast, 120000);
+    const getFiveDayForecastInterval = setInterval(fetchCurrentWeatherForecast, 21600000);
+    const getRadarMapInterval = setInterval(setUpdatedRadarUrl, 600000);
 
-    setRadarUrl();
-    setCurrentDisplayTime();
-    fetchCurrentWeather();
-    fetchFiveDayForecast();
+    setUpdatedRadarUrl();
+    fetchCurrentWeatherForecast();
+    fetchCurrentFiveDayForecast();
 
     return () => {
         clearInterval(getOneSecondIntervals);
