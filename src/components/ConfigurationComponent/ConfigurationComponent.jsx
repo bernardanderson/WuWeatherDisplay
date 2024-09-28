@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { radarListing } from "./RadarListing.js";
 import { defaultConfig } from "../../store/defaultConfig.js";
+import callAllApis from "../../services/CallAllApis.js";
 import ClockInput from "./ClockInput/ClockInput.jsx";
 import PropTypes from "prop-types";
 
@@ -23,8 +24,8 @@ export default function ConfigurationComponent(props) {
 
     const handleSave = () => {
         configState.setWuConfigAndLocalState(currentConfig);
+        callAllApis();
         navigate("/");
-        location.reload(true);
     }
 
     const handleDeleteConfig = () => {
@@ -38,7 +39,7 @@ export default function ConfigurationComponent(props) {
             <div className={"input-row"}>
                 <span>WU Base API Key:</span>
                 <input className={"apikey-width"}
-                       value={currentConfig.baseApiKey}
+                       value={currentConfig.baseApiKey ?? ""}
                        onChange={(e) => {
                            setCurrentConfig({...currentConfig, baseApiKey: e.target.value})
                        }}
@@ -48,7 +49,7 @@ export default function ConfigurationComponent(props) {
             <div className={"input-row"}>
                 <span>WU 5 Day Forecast API Key:</span>
                 <input className={"apikey-width"}
-                       value={currentConfig.fiveDayApiKey}
+                       value={currentConfig.fiveDayApiKey ?? ""}
                        onChange={(e) => {
                            setCurrentConfig({...currentConfig, fiveDayApiKey: e.target.value})
                        }}
@@ -58,7 +59,7 @@ export default function ConfigurationComponent(props) {
             <div className={"input-row"}>
                 <span>Weather Station Id:</span>
                 <input
-                    value={currentConfig.weatherStationId}
+                    value={currentConfig.weatherStationId ?? ""}
                     onChange={(e) => {
                         setCurrentConfig({...currentConfig, weatherStationId: e.target.value})
                     }}
@@ -144,28 +145,6 @@ export default function ConfigurationComponent(props) {
                         }
                     </div> : undefined
             }
-
-            <div className={"input-row"}>
-                <span>Map Update Interval (in seconds):</span>
-                <input
-                    value={currentConfig.mapUpdateInterval / 1000}
-                    type={"number"}
-                    onChange={(e) =>
-                        setCurrentConfig({...currentConfig, mapUpdateInterval: e.target.value * 1000})
-                    }
-                />
-            </div>
-
-            <div className={"input-row"}>
-                <span>Current Weather Update Interval (in seconds):</span>
-                <input
-                    value={currentConfig.weatherUpdateInterval / 1000}
-                    type={"number"}
-                    onChange={(e) =>
-                        setCurrentConfig({...currentConfig, weatherUpdateInterval: e.target.value * 1000})
-                    }
-                />
-            </div>
 
             <div className={"input-row"}>
                 <button onClick={handleSave}>Save</button>
