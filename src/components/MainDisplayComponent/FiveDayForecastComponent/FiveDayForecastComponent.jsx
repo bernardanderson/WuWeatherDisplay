@@ -27,7 +27,7 @@ export default function FiveDayForecastComponent(props) {
                     <div>{forecastCard.weatherPhrase.night}</div>
                 </div>
             </div>
-            <div>H: {forecastCard.maxTemp} / L: {forecastCard.minTemp}</div>
+            <div className={"forecast-temperature"}>H: {forecastCard.maxTemp} / L: {forecastCard.minTemp}</div>
         </div>
     );
 
