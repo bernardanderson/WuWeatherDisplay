@@ -8,12 +8,15 @@ export const useWeatherDataStore = create((set, get) => ({
     currentFiveDayForecast: undefined,
     fetchCurrentWeather: async () => {
         const data = await getCurrentWeather();
-        if (data === undefined && get().currentWeather !== undefined) return;
+        if (data === undefined && get().currentWeather !== undefined) {
+            const pastCurrentWeather = get().currentWeather
+            set({ currentWeather: {...pastCurrentWeather, time: pastCurrentWeather.time + " (Past Due)"}});
+            return;
+        };
         set({ currentWeather: data });
     },
     fetchFiveDayForecast: async () => {
         const data = await getFiveDayForecast();
-        if (data === undefined && get().currentWeather !== undefined) return;
         set({ currentFiveDayForecast: data });
     }
 }));
