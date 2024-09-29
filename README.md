@@ -15,7 +15,7 @@
 The application is Javascript written with React library. It uses Vite for the tooling.
 - To run in development mode: `npm run dev`
 - To build you own production build: `npm run build`
-- Or run it from `https://bernardanderson.github.io`
+- Or run it from `https://bernardanderson.github.io/wuweatherdisplay-app`
 
 #### Configuration Requirements:
 
