@@ -4,9 +4,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from './App.jsx'
 import './store/initializeIntervals.js';
 
+const getBasePath = () => {
+    const fullPath = window.location.pathname;
+    const basePath = fullPath.endsWith('/') ? fullPath : `${fullPath}/`;
+    return basePath;
+};
+
+const basePath = getBasePath();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <Router>
+      <Router basename={basePath}>
           <App />
       </Router>
   </StrictMode>

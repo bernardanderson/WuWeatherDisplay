@@ -19,7 +19,20 @@ The application is Javascript written with React library. It uses Vite for the t
 
 #### Configuration Requirements:
 
-- A WU API access key(s).
-  - **Note:** There are two configuration locations for WU API keys. The same one can be used for both. Sometimes people has access to multiple keys with different permission levels and/or API request count limitations.
-- A WU Weather Station ID. These Ids can be found on WU website [[Example](https://www.wunderground.com/wundermap?lat=45.679&lon=-111.036)]. Select one of the circles to see it's `Station ID`. You are essentially tapping into the data of someone's personal weather station data, so find one close to your location.
+##### A WU API access key(s).
+
+Free API keys are only issued to registered and active Weather Underground personal weather station users.
+To use this integration, you need a Weather Underground personal weather station API key and Station ID.
+
+1. **A Weather Underground API access key.**  
+   You must have a personal weather station registered and uploading data to Weather Underground.
+      - Join [Weather Underground](https://www.wunderground.com)
+      - Go to `My Profile` -> `My Weather Stations`
+      - Add a new [Personal Weather Station](https://www.wunderground.com/pws/buying-guide)
+      - Get your free [API Key](https://www.wunderground.com/member/api-keys).
+
+      **Note:** There are two configuration locations for WU API keys. The same one can be used for both. Sometimes people has access to multiple keys with different permission levels and/or API request count limitations.  
+
+
+2. A WU Weather Station ID. These Ids can be found on WU website [[Example](https://www.wunderground.com/wundermap?lat=45.679&lon=-111.036)]. Select one of the circles to see it's `Station ID`. You are essentially tapping into the data of someone's personal weather station data, so find one close to your location.
 

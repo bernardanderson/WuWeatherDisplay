@@ -43,6 +43,6 @@ export const useRadarStore = create((set) => ({
     setRadarUrl: () => {
         const updateUrlRandomizer = () => Math.random().toString().slice(2);
         const radarMapId = () => useConfigStore.getState().wuConfig.radarMapId;
-        set({radarUrl: `https://radar.weather.gov/ridge/standard/${radarMapId()}_loop.gif?rand=${updateUrlRandomizer()}`})
+        set({radarUrl: `https://radar.weather.gov/ridge/standard/${radarMapId()}_loop.gif?t=${updateUrlRandomizer()}`})
     }
 }));

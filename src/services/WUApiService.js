@@ -8,7 +8,7 @@ const httpService = new HttpService(WU_BASE_URL);
 export async function getCurrentWeather() {
     try {
         const config = useConfigStore.getState().wuConfig;
-        if (!config.baseApiKey && !config.weatherStationId)
+        if (!config.baseApiKey || !config.weatherStationId)
             return undefined;
 
         const rawData =
@@ -23,7 +23,7 @@ export async function getCurrentWeather() {
 export async function getFiveDayForecast() {
     try {
         const config = useConfigStore.getState().wuConfig;
-        if (!config.fiveDayApiKey && !config.weatherStationId)
+        if (!config.fiveDayApiKey || !config.postalCode)
             return undefined;
 
         const rawData =

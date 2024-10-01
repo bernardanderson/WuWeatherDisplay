@@ -1,6 +1,7 @@
 import ClockComponent from "./ClockComponent/ClockComponent.jsx";
 import FiveDayForecastComponent from "./FiveDayForecastComponent/FiveDayForecastComponent.jsx";
 import WeatherMapComponent from "../WeatherMapComponent/WeatherMapComponent.jsx";
+import ConfigurationButton from "../ConfigurationButton/ConfigurationButton.jsx";
 import PropTypes from "prop-types";
 import './styles.scss';
 
@@ -16,14 +17,23 @@ export default function MainDisplayComponent(props) {
 
     return (
         (currentWeatherData === undefined) ?
-            <>
-                <div>Loading...</div>
-                <button onClick={() => navigate("/config")}>Configuration</button>
-            </> :
-            <div className="access-weather--overview-display">
-                <ClockComponent
-                    weatherDateTime={currentWeatherData?.time}
+            <div className={"access-weather--overview-display--error"}>
+                <span>Error Loading Weather Data...</span>
+                <ConfigurationButton
+                    navigate={navigate}
+                    isDarkMode={configState.wuConfig.inDarkMode}
                 />
+            </div> :
+            <div className="access-weather--overview-display">
+                <div className="main-data--panel-header">
+                    <ClockComponent
+                        weatherDateTime={currentWeatherData?.time}
+                    />
+                    <ConfigurationButton
+                        navigate={navigate}
+                        isDarkMode={configState.wuConfig.inDarkMode}
+                    />
+                </div>
                 <hr/>
                 <div className="main-data--panel">
                     <div className="edge-column">
@@ -46,7 +56,6 @@ export default function MainDisplayComponent(props) {
                         <WeatherMapComponent
                             inDarkMode={configState.wuConfig.inDarkMode}
                         />
-                        <button onClick={() => navigate("/config")}>Configuration</button>
                     </div>
                     <div className="edge-column">
                         <div className="full-width">
