@@ -29,7 +29,7 @@ function initializeIntervals() {
 
     const getOneSecondIntervals = setInterval(oneSecondIntervalFunctions, 1000);
     const getCurrentWeatherInterval = setInterval(fetchCurrentWeatherForecast, 120000);
-    const getFiveDayForecastInterval = setInterval(fetchCurrentWeatherForecast, 21600000);
+    const getFiveDayForecastInterval = setInterval(fetchCurrentFiveDayForecast, 21600000);
     const getRadarMapInterval = setInterval(setUpdatedRadarUrl, 600000);
 
     setUpdatedRadarUrl();
