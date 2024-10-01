@@ -14,7 +14,9 @@ const basePath = getBasePath();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
       <Router basename={basePath}>
-          <App />
+          <App
+              basename={basePath}
+          />
       </Router>
   </StrictMode>
 )

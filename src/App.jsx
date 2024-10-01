@@ -5,8 +5,13 @@ import {useConfigStore, useWeatherDataStore} from "./store/store.js";
 import { useEffect } from "react";
 
 import './App.css';
+import PropTypes from "prop-types";
 
-function App() {
+App.propTypes = {
+    basename: PropTypes.string.isRequired
+}
+
+function App({basename}) {
     const navigate = useNavigate();
     const configState = useConfigStore((state) => state);
     const weatherData = useWeatherDataStore((state) => state);
@@ -14,7 +19,7 @@ function App() {
     useEffect(() => {
         const currentPath = window.location.pathname;
 
-        if (currentPath === "/config" || !configState.hasConfig()) {
+        if (currentPath === `${basename}config` || !configState.hasConfig()) {
             navigate("/config");
         } else {
             navigate("/");
