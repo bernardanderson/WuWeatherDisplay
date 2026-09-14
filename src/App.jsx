@@ -42,6 +42,7 @@ function App({basename}) {
                 <MainDisplayComponent
                     navigate={navigate}
                     currentWeatherData={weatherData.currentWeather}
+                    notConfigured={weatherData.notConfigured}
                     fiveDayForecast={weatherData.currentFiveDayForecast}
                     configState={configState}
                 />

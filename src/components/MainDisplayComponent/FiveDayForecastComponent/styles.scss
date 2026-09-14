@@ -1,39 +1,64 @@
-.five-day-forecast-cards {
-    display: flex;
-    justify-content: center;
-    padding-left: 75px;
+.five-day-forecast-section {
+    margin-top: clamp(4px, 0.5vw, 9px);
 
-    .forecast-card {
-        width: 200px;
-        height: 93px;
-        padding-top: 5px!important;
+    .five-day-forecast--past-due {
+        text-align: center;
+        font-style: italic;
+        font-size: clamp(14px, 1.7vw, 24px);
+        color: var(--muted);
+        margin-bottom: clamp(6px, 0.8vw, 14px);
+    }
 
-        .forecast-card--title {
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
+    .five-day-forecast-cards {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: clamp(8px, 1vw, 16px);
+        width: 100%;
 
-        .forecast-temperature {
-            font-size: 18px!important;
-        }
+        .forecast-card {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: clamp(6px, 0.9vw, 12px) clamp(7px, 0.9vw, 14px);
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: clamp(12px, 1.4vw, 20px);
+            box-shadow: 0 2px 10px var(--shadow);
+            text-align: left;
 
-        .day-night-container {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            font-size: 18px!important;
-
-            .day-night-phrase {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                margin: 0 8px 0 20px;
+            .forecast-card--title {
+                font-weight: 700;
+                font-size: clamp(14px, 1.5vw, 24px);
+                margin-bottom: clamp(4px, 0.6vw, 8px);
             }
 
-            .day-night-weather {
+            .day-night-container {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 align-items: flex-start;
+                font-size: clamp(13px, 1.5vw, 21px);
+                line-height: 1.2;
+
+                .day-night-phrase {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    color: var(--muted);
+                    min-width: 3.4em;
+                    margin-right: 8px;
+                }
+
+                .day-night-weather {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    flex: 1;
+                }
+            }
+
+            .forecast-temperature {
+                font-size: clamp(14px, 1.6vw, 24px);
+                font-weight: 600;
+                margin-top: clamp(3px, 0.5vw, 7px);
             }
         }
     }

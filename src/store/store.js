@@ -5,19 +5,42 @@ import dayjs from "dayjs";
 
 export const useWeatherDataStore = create((set, get) => ({
     currentWeather: undefined,
+    isPastDue: false,
+    notConfigured: false,
     currentFiveDayForecast: undefined,
+    isFiveDayPastDue: false,
+    fiveDayNotConfigured: false,
     fetchCurrentWeather: async () => {
-        const data = await getCurrentWeather();
-        if (data === undefined && get().currentWeather !== undefined) {
-            const pastCurrentWeather = get().currentWeather
-            set({ currentWeather: {...pastCurrentWeather, time: pastCurrentWeather.time + " (Past Due)"}});
-            return;
-        };
-        set({ currentWeather: data });
+        const result = await getCurrentWeather();
+        switch (result.status) {
+            case "ok":
+                set({ currentWeather: result.data, isPastDue: false, notConfigured: false });
+                break;
+            case "not-configured":
+                set({ notConfigured: true });
+                break;
+            default: // "error" — endpoint unreachable / bad response; keep last good data and flag it
+                if (get().currentWeather !== undefined) {
+                    set({ isPastDue: true });
+                }
+                break;
+        }
     },
     fetchFiveDayForecast: async () => {
-        const data = await getFiveDayForecast();
-        set({ currentFiveDayForecast: data });
+        const result = await getFiveDayForecast();
+        switch (result.status) {
+            case "ok":
+                set({ currentFiveDayForecast: result.data, isFiveDayPastDue: false, fiveDayNotConfigured: false });
+                break;
+            case "not-configured":
+                set({ fiveDayNotConfigured: true });
+                break;
+            default: // "error" — endpoint unreachable / bad response; keep last good forecast and flag it
+                if (get().currentFiveDayForecast !== undefined) {
+                    set({ isFiveDayPastDue: true });
+                }
+                break;
+        }
     }
 }));
 
