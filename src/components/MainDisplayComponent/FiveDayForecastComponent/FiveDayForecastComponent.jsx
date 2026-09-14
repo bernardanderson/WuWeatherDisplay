@@ -1,3 +1,4 @@
+import {useWeatherDataStore} from "../../../store/store.js";
 import PropTypes from "prop-types";
 import './styles.scss';
 
@@ -7,9 +8,15 @@ FiveDayForecastComponent.propTypes = {
 
 export default function FiveDayForecastComponent(props) {
     const {fiveDayForecast} = props;
+    const isFiveDayPastDue = useWeatherDataStore((state) => state.isFiveDayPastDue);
+    const fiveDayNotConfigured = useWeatherDataStore((state) => state.fiveDayNotConfigured);
 
-    if (fiveDayForecast === undefined)
-        return <div>Five Day Forecast Data Missing</div>;
+    if (fiveDayNotConfigured || fiveDayForecast === undefined)
+        return <div>
+            {fiveDayNotConfigured
+                ? "Forecast is not configured. Add your 5-day forecast API key and postal code."
+                : "Five Day Forecast Data Missing"}
+        </div>;
 
     const fiveDayForecastCards = fiveDayForecast.map(forecastCard =>
         <div
@@ -32,8 +39,13 @@ export default function FiveDayForecastComponent(props) {
     );
 
     return (
-        <div className={"five-day-forecast-cards"}>
-            {fiveDayForecastCards}
+        <div className={"five-day-forecast-section"}>
+            {isFiveDayPastDue
+                ? <div className={"five-day-forecast--past-due"}>5-Day Forecast is Past Due — showing last available data.</div>
+                : undefined}
+            <div className={"five-day-forecast-cards"}>
+                {fiveDayForecastCards}
+            </div>
         </div>
     );
 }

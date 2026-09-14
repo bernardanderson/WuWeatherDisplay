@@ -8,17 +8,20 @@ import './styles.scss';
 MainDisplayComponent.propTypes = {
     navigate: PropTypes.func.isRequired,
     currentWeatherData: PropTypes.object,
+    notConfigured: PropTypes.bool,
     configState: PropTypes.object,
     fiveDayForecast: PropTypes.array
 };
 
 export default function MainDisplayComponent(props) {
-    const {navigate, currentWeatherData, fiveDayForecast, configState} = props;
+    const {navigate, currentWeatherData, notConfigured, fiveDayForecast, configState} = props;
 
     return (
-        (currentWeatherData === undefined) ?
+        (notConfigured || currentWeatherData === undefined) ?
             <div className={"access-weather--overview-display--error"}>
-                <span>Error Loading Weather Data...</span>
+                <span>{notConfigured
+                    ? "Weather is not configured. Add your Weather Underground API key and station ID."
+                    : "Error Loading Weather Data..."}</span>
                 <ConfigurationButton
                     navigate={navigate}
                     isDarkMode={configState.wuConfig.inDarkMode}
@@ -37,10 +40,9 @@ export default function MainDisplayComponent(props) {
                 <hr/>
                 <div className="main-data--panel">
                     <div className="edge-column">
-                        <div className="full-width">
+                        <div className="full-width full-width--accent">
                             <div className="panel-heading">Temperature</div>
                             <div className="sub-item">{currentWeatherData.tempf}<span className="smaller-font">°F</span></div>
-                            <hr/>
                         </div>
                         <div className="full-width">
                             <div className="panel-heading">Humidity</div>
