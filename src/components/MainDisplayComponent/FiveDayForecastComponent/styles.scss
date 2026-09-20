@@ -16,6 +16,8 @@
         width: 100%;
 
         .forecast-card {
+            display: flex;
+            flex-direction: column;
             flex: 1 1 0;
             min-width: 0;
             padding: clamp(6px, 0.9vw, 12px) clamp(7px, 0.9vw, 14px);
@@ -56,9 +58,12 @@
             }
 
             .forecast-temperature {
+                /* pin to the card's bottom so the H/L row lines up across all cards,
+                   even when the day/night text above wraps to two lines */
                 font-size: clamp(14px, 1.6vw, 24px);
                 font-weight: 600;
-                margin-top: clamp(3px, 0.5vw, 7px);
+                margin-top: auto;
+                padding-top: clamp(3px, 0.5vw, 7px);
             }
         }
     }
