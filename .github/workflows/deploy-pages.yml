@@ -64,3 +64,40 @@ jobs:
       - name: Publish to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e  # v4
+
+  release:
+    # After a successful deploy, publish a GitHub Release for the new version —
+    # only if package.json holds a version with no existing tag yet (plain
+    # feature merges never re-release; the guard below simply skips them).
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push the v* tag and create the release entry
+    steps:
+      - name: Check out main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: Cut the release for this version, unless one already exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          VERSION="$(jq -er '.version' package.json)"
+          TAG="v${VERSION}"
+
+          if git ls-remote --exit-code --tags origin "${TAG}" >/dev/null 2>&1; then
+            echo "::notice::Release ${TAG} already exists — skipping."
+            exit 0
+          fi
+
+          # Release notes = commit subjects shipped since the previous vX tag.
+          PREV_TAG="$(git tag -l 'v[0-9]*' | sort -V | tail -n 1 || true)"
+          RANGE="${PREV_TAG:+${PREV_TAG}..}HEAD"
+          NOTES_MD="$(git log --pretty='%s' "${RANGE}" | head -n 25 | sed 's/^/- /')"
+          [ -z "${NOTES_MD}" ] && NOTES_MD="- Published from main."
+
+          gh release create \
+            --title "Weather Display ${VERSION}" \
+            --notes "${NOTES_MD}" \
+            "${TAG}"
