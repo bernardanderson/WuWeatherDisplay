@@ -1,0 +1,66 @@
+# Publish this weather display as a GitHub Pages project site for this account,
+# on every push to main (and via manual dispatch).
+#
+# One-time prerequisites in github.com Settings -> THIS repo:
+#   1. "Pages"        -> Source = "GitHub Actions" (branch main)
+#   2. "Environments" -> create an environment named exactly "github-pages"
+# After that no secrets or tokens are needed: the deploy job authenticates
+# to Pages via OIDC ("id-token"), scoped only by these repo permissions.
+
+name: Deploy weather display site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read   # checkout
+  pages: write     # build job uploads the artifact; deploy job publishes it
+  id-token: write  # deploy job authenticates against GitHub Pages (OIDC)
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false  # never interrupt an in-flight publication
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444  # v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint gate (never ship a build that fails its own lint)
+        run: npm run lint
+
+      # The site lives under the account's project path, so index.html asset
+      # URLs must be prefixed with it. Local dev/builds keep base = "/" as-is;
+      # only this CI build is scoped to the published subpath. The app itself
+      # already infers its route basename from window.location at runtime.
+      - name: Build for /WuWeatherDisplay/
+        run: npm run build -- --base=/WuWeatherDisplay/
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages   # the one created under this repo's Settings > Environments
+      url: "${{ steps.deployment.outputs.page_url }}"
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e  # v4
