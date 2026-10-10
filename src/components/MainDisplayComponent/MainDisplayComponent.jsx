@@ -9,19 +9,22 @@ MainDisplayComponent.propTypes = {
     navigate: PropTypes.func.isRequired,
     currentWeatherData: PropTypes.object,
     notConfigured: PropTypes.bool,
+    weatherError: PropTypes.string,
     configState: PropTypes.object,
     fiveDayForecast: PropTypes.array
 };
 
 export default function MainDisplayComponent(props) {
-    const {navigate, currentWeatherData, notConfigured, fiveDayForecast, configState} = props;
+    const {navigate, currentWeatherData, notConfigured, weatherError, fiveDayForecast, configState} = props;
 
     return (
         (notConfigured || currentWeatherData === undefined) ?
             <div className={"access-weather--overview-display--error"}>
                 <span>{notConfigured
                     ? "Weather is not configured. Add your Weather Underground API key and station ID."
-                    : "Error Loading Weather Data..."}</span>
+                    : weatherError
+                        ? `Weather data could not be loaded (${weatherError}). The app will keep retrying.`
+                        : "Error Loading Weather Data..."}</span>
                 <ConfigurationButton
                     navigate={navigate}
                     isDarkMode={configState.wuConfig.inDarkMode}

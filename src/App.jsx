@@ -43,6 +43,7 @@ function App({basename}) {
                     navigate={navigate}
                     currentWeatherData={weatherData.currentWeather}
                     notConfigured={weatherData.notConfigured}
+                    weatherError={weatherData.lastWeatherError}
                     fiveDayForecast={weatherData.currentFiveDayForecast}
                     configState={configState}
                 />

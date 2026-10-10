@@ -59,7 +59,7 @@
 
             .forecast-temperature {
                 /* pin to the card's bottom so the H/L row lines up across all cards,
-                   even when the day/night text above wraps to two lines */
+                   regardless of how the auto-fitted AM/PM phrases above sized themselves */
                 font-size: clamp(14px, 1.6vw, 24px);
                 font-weight: 600;
                 margin-top: auto;

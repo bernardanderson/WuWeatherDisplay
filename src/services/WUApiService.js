@@ -14,10 +14,10 @@ export async function getCurrentWeather() {
         const rawData =
             await httpService.getData(`/v2/pws/observations/current?stationId=${config.weatherStationId}&format=json&units=e&apiKey=${config.baseApiKey}`)
         const mapped = mapper.mapRawWeatherConditions(rawData.observations[0]);
-        return mapped === undefined ? { status: "error" } : { status: "ok", data: mapped };
+        return mapped === undefined ? { status: "error", error: "Server response could not be parsed as current weather data" } : { status: "ok", data: mapped };
     } catch(e) {
         console.error('Error in getCurrentWeather: ', e);
-        return { status: "error" };
+        return { status: "error", error: e.message };
     }
 }
 
@@ -31,13 +31,13 @@ export async function getFiveDayForecast() {
             await httpService.getData(`/v3/wx/forecast/daily/5day?postalKey=${config.postalCode}:US&units=e&language=en-US&format=json&apiKey=${config.fiveDayApiKey}`)
 
         if (rawData === null || rawData === undefined || rawData.error)
-            return { status: "error" };
+            return { status: "error", error: "Server response was missing forecast data" };
 
         const mapped = mapper.mapRawFiveDayForecast(rawData);
-        return mapped === undefined ? { status: "error" } : { status: "ok", data: mapped };
+        return mapped === undefined ? { status: "error", error: "Server response could not be parsed as a 5-day forecast" } : { status: "ok", data: mapped };
     } catch(e) {
         console.error('Error in getFiveDayForecast: ', e);
-        return { status: "error" };
+        return { status: "error", error: e.message };
     }
 }
 
