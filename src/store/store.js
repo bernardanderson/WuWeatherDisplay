@@ -7,22 +7,28 @@ export const useWeatherDataStore = create((set, get) => ({
     currentWeather: undefined,
     isPastDue: false,
     notConfigured: false,
+    lastWeatherError: null,
     currentFiveDayForecast: undefined,
     isFiveDayPastDue: false,
     fiveDayNotConfigured: false,
+    lastForecastError: null,
     fetchCurrentWeather: async () => {
         const result = await getCurrentWeather();
         switch (result.status) {
             case "ok":
-                set({ currentWeather: result.data, isPastDue: false, notConfigured: false });
+                set({ currentWeather: result.data, isPastDue: false, notConfigured: false, lastWeatherError: null });
                 break;
             case "not-configured":
-                set({ notConfigured: true });
+                set({ notConfigured: true, lastWeatherError: null });
                 break;
-            default: // "error" — endpoint unreachable / bad response; keep last good data and flag it
-                if (get().currentWeather !== undefined) {
-                    set({ isPastDue: true });
-                }
+            default: // "error" — endpoint unreachable / rejected key / bad response; keep last good data and flag it.
+                     // A request was actually made here, so clear any stale unconfigured flag instead of letting a
+                     // previous incomplete save masquerade as one (the real failure reason lives in lastWeatherError).
+                set({
+                    lastWeatherError: result.error ?? "Request failed",
+                    notConfigured: false,
+                    ...(get().currentWeather !== undefined && { isPastDue: true })
+                });
                 break;
         }
     },
@@ -30,15 +36,17 @@ export const useWeatherDataStore = create((set, get) => ({
         const result = await getFiveDayForecast();
         switch (result.status) {
             case "ok":
-                set({ currentFiveDayForecast: result.data, isFiveDayPastDue: false, fiveDayNotConfigured: false });
+                set({ currentFiveDayForecast: result.data, isFiveDayPastDue: false, fiveDayNotConfigured: false, lastForecastError: null });
                 break;
             case "not-configured":
-                set({ fiveDayNotConfigured: true });
+                set({ fiveDayNotConfigured: true, lastForecastError: null });
                 break;
-            default: // "error" — endpoint unreachable / bad response; keep last good forecast and flag it
-                if (get().currentFiveDayForecast !== undefined) {
-                    set({ isFiveDayPastDue: true });
-                }
+            default: // same reasoning as fetchCurrentWeather above (see comment there)
+                set({
+                    lastForecastError: result.error ?? "Request failed",
+                    fiveDayNotConfigured: false,
+                    ...(get().currentFiveDayForecast !== undefined && { isFiveDayPastDue: true })
+                });
                 break;
         }
     }
